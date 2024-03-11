@@ -12,6 +12,10 @@ import { CustomValidators } from '@utils/validators';
   templateUrl: './register-form.component.html',
 })
 export class RegisterFormComponent {
+  formUser = this.formBuilder.nonNullable.group({
+    email: ['', [Validators.email, Validators.required]],
+  });
+
   form = this.formBuilder.nonNullable.group(
     {
       name: ['', [Validators.required]],
@@ -26,9 +30,11 @@ export class RegisterFormComponent {
     }
   );
   status: RequestStatus = 'init';
+  statusUser: RequestStatus = 'init';
   faEye = faEye;
   faEyeSlash = faEyeSlash;
   showPassword = false;
+  showRegister = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -54,6 +60,27 @@ export class RegisterFormComponent {
       });
     } else {
       this.form.markAllAsTouched();
+    }
+  }
+
+  validateUser() {
+    if (this.formUser.valid) {
+      this.statusUser = 'loading';
+      const { email } = this.formUser.getRawValue();
+      this.authService.isAvailable(email).subscribe({
+        next: (rta) => {
+          this.statusUser = 'success';
+          if (rta.isAvailable) {
+            this.showRegister = true;
+            this.form.controls.email.setValue(email);
+          } else {
+            this.router.navigate(['/login'], { queryParams: { email } });
+          }
+        },
+        error: (error) => {},
+      });
+    } else {
+      this.formUser.markAllAsTouched();
     }
   }
 }
