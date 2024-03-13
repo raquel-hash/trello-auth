@@ -1,5 +1,4 @@
-<ng-container *ngIf="user$ | async as user
-">
+<ng-container *ngIf="user$ | async as user">
   <nav class="bg-sky-700 border-gray-200 px-6 shadow-md">
     <div class="flex flex-wrap justify-between items-center">
       <div class="flex items-center">
@@ -126,6 +125,14 @@
             Log out
           </button>
         </li>
+        <li>
+          <button
+            (click)="isValidToken()"
+            class="block py-2 px-4 text-sm text-gray-700"
+          >
+            isValidToken
+          </button>
+        </li>
       </ul>
     </div>
   </ng-template>
@@ -151,5 +158,4 @@
       <div class="py-3 px-4 flex justify-between">Content</div>
     </div>
   </ng-template>
-
 </ng-container>
