@@ -40,4 +40,9 @@ export class CardColorComponent {
       'text-white': true,
     },
   };
+
+  get colors() {
+    const classes = this.mapColors[this.color];
+    return classes ? classes : {};
+  }
 }
