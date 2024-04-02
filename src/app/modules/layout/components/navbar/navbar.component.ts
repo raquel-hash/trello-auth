@@ -39,4 +39,8 @@ export class NavbarComponent {
   isValidToken() {
     console.log(this.tokenService.isValidToken());
   }
+
+  close(event: boolean) {
+    this.isOpenOverlayCreateBoard = event;
+  }
 }

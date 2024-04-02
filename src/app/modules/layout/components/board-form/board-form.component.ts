@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Route, Router } from '@angular/router';
 import { Colors } from '@models/colors.model';
@@ -9,6 +9,7 @@ import { BoardService } from '@services/board.service';
   templateUrl: './board-form.component.html',
 })
 export class BoardFormComponent {
+  @Output() closeOverlay = new EventEmitter<boolean>();
   form = this.formBuilder.nonNullable.group({
     title: ['', [Validators.required]],
     backgroundColor: new FormControl<Colors>('sky', {
@@ -28,7 +29,7 @@ export class BoardFormComponent {
       this.boardService
         .createBoard(title, backgroundColor)
         .subscribe((board) => {
-          console.log(board);
+          this.closeOverlay.next(false);
           this.router.navigate(['/app/boards', board.id]);
         });
     } else {
