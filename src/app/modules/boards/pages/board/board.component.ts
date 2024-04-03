@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -31,7 +31,7 @@ import { BACKGROUNDS } from '@models/colors.model';
     `,
   ],
 })
-export class BoardComponent implements OnInit {
+export class BoardComponent implements OnInit, OnDestroy {
   board: Board | null = null;
   inputCard = new FormControl<string>('', {
     nonNullable: true,
@@ -60,6 +60,10 @@ export class BoardComponent implements OnInit {
         this.getBoard(id);
       }
     });
+  }
+
+  ngOnDestroy(): void {
+    this.boardService.setBackgroundColor('sky');
   }
 
   drop(event: CdkDragDrop<Card[]>) {
@@ -123,6 +127,7 @@ export class BoardComponent implements OnInit {
   private getBoard(id: string) {
     this.boardService.getBoard(id).subscribe((board) => {
       this.board = board;
+      this.boardService.setBackgroundColor(this.board.backgroundColor);
     });
   }
 
